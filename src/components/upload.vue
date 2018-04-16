@@ -1,62 +1,70 @@
 <template>
   <div class="example-drag">
-    <div class="upload">
-      <ul v-if="files.length">
-        <li v-for="(file) in files" :key="file.id">
-          <span>{{file.name}}</span> -
-          <span>{{file.size | formatSize}}</span> -
-          <span v-if="file.error">{{file.error}}</span>
-          <span v-else-if="file.success">success</span>
-          <span v-else-if="file.active">active</span>
-          <span v-else-if="file.active">active</span>
-          <span v-else></span>
-        </li>
-      </ul>
-      <ul v-else>
-        <td colspan="7">
-          <div class="text-center p-5">
-            <h4>Drop files anywhere to upload<br/>or</h4>
-            <label for="file" class="btn btn-lg btn-primary">Select Files</label>
+      <div class="fileNames" v-if="files.length">
+        <div v-for="(file) in files" :key="file.id">
+          <div>FileName: {{file.name}}</div>
+          <div>FileSize: {{file.size}}</div>
+          <div>State:
+            <span v-if="file.error">{{file.error}}</span>
+            <span v-else-if="file.success">success</span>
+            <span v-else-if="file.active">active</span>
+            <span v-else-if="file.active">active</span>
+            <span v-else>ready</span>
           </div>
-        </td>
-      </ul>
+        </div>
+      </div>
+      <div class="hint" v-else>
+        <div>Drop files anywhere to upload<br/>or</div>
+        <label for="file" class="btn-file">Click Me</label>
+      </div>
 
       <div v-show="$refs.upload && $refs.upload.dropActive" class="drop-active">
-            <h3>Drop files to upload</h3>
+          <h3>Drop files to upload</h3>
       </div>
 
       <div class="example-btn">
-        <file-upload
-          class="btn btn-primary"
-          post-action="/upload/post"
-          :multiple="true"
-          :drop="true"
-          :drop-directory="true"
-          v-model="files"
-          ref="upload">
-          <i class="fa fa-plus"></i>
-          Select files
-        </file-upload>
-        <button type="button" class="btn btn-success"
-            v-if="!$refs.upload || !$refs.upload.active"
-            @click.prevent="$refs.upload.active = true">
-          <i class="fa fa-arrow-up" aria-hidden="true"></i>
-          Start Upload
-        </button>
-        <button type="button" class="btn btn-danger"
-            v-else @click.prevent="$refs.upload.active = false">
-          <i class="fa fa-stop" aria-hidden="true"></i>
-          Stop Upload
-        </button>
+        <div v-show ="false">
+            <file-upload
+            class="btn btn-primary"
+            post-action="/upload/post"
+            :multiple="false"
+            :drop="true"
+            :drop-directory="false"
+            v-model="files"
+            @input-file="inputFile"
+            ref="upload">
+            <i class="fa fa-plus"></i>
+            Select files
+            </file-upload>
+        </div>
+        <el-button type="primary"
+             v-if="!$refs.upload || !$refs.upload.active"
+            @click.prevent="$refs.upload.active = true"
+        >
+            Start Upload
+            <i class="el-icon-upload el-icon--right"></i>
+        </el-button>
       </div>
-    </div>
   </div>
 </template>
+
 <style>
-.example-drag label.btn {
-  margin-bottom: 0;
-  margin-right: 1rem;
+.btn-file {
+    color: #42b983;
+    font-size: 32px;
 }
+.example-drag {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    height: 100%;
+}
+.example-drag label.btn {
+  color: #fff;
+  font-size: 32px;
+}
+
 .example-drag .drop-active {
   top: 0;
   bottom: 0;
@@ -81,6 +89,20 @@
   color: #fff;
   padding: 0;
 }
+.example-drag .hint {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    margin-bottom: 30px;
+}
+.example-drag .hint>div {
+    font-size: 32px;
+}
+.fileNames {
+    font-size: 32px;
+    margin: 30px 0;
+}
 </style>
 
 <script>
@@ -94,6 +116,18 @@ export default {
         return {
             files: [],
         }
+    },
+    methods: {
+        inputFile(newFile, oldFile) {
+            if (newFile && oldFile && !newFile.active && oldFile.active) {
+                // 清空
+                this.files = []
+                if (newFile.xhr && newFile.xhr.status === 200) {
+                    // 获得响应状态码
+                    // console.log('status', newFile.xhr.status)
+                }
+            }
+        },
     },
 }
 </script>

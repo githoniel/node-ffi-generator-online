@@ -30,18 +30,15 @@ module.exports = {
       js: 'never',
       vue: 'never'
     }],
+    'linebreak-style': 'off',
     'semi': ['error', 'never'],
     'indent': ['error', 4],
     // disallow reassignment of function parameters
     // disallow parameter object manipulation except for specific exclusions
     'no-param-reassign': ['error', {
-      props: true,
-      ignorePropertyModificationsFor: [
-        'state', // for vuex state
-        'acc', // for reduce accumulators
-        'e' // for e.returnvalue
-      ]
+      props: false,
     }],
+    'consistent-return': 'off',
     // allow optionalDependencies
     'import/no-extraneous-dependencies': ['error', {
       optionalDependencies: ['test/unit/index.js']

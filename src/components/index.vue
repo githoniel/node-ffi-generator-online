@@ -13,17 +13,24 @@
             <el-col :span="24" class="desc">
                 <div>Thanks to tjfontaine's awesome project
                     <a href="https://github.com/tjfontaine/node-ffi-generate">
-                        node-ffi-generate
+                        node-ffi-generate !
                     </a>
                 </div>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="6" ref="left">
                 <div class="box" ref="articulation"></div>
             </el-col>
-            <el-col :span="16">
+            <el-col :span="18" ref="right">
                 <upload-box></upload-box>
             </el-col>
         </el-row>
+        <transition name="el-zoom-in-top">
+            <el-row class="result" v-if="respText">
+                <el-col :span="24">
+                    <pre>{{respText}}</pre>
+                </el-col>
+            </el-row>
+        </transition>
     </div>
 </template>
 
@@ -51,13 +58,18 @@ export default {
             },
         }
     },
+    computed: {
+        respText() {
+            return this.$store.state.respText
+        },
+    },
     mounted() {
         const elem = this.$refs.articulation
         const animData = {
             container: elem,
             renderer: 'svg',
             loop: true,
-            autoplay: false,
+            autoplay: true,
             rendererSettings: {
                 progressiveLoad: true,
                 preserveAspectRatio: 'xMidYMid meet',
@@ -66,6 +78,11 @@ export default {
         }
         const anim = lottie.loadAnimation(animData)
         anim.setSubframe(false)
+        anim.addEventListener('enterFrame', () => {
+            const height = this.$refs.left.$el.clientHeight
+            this.$refs.right.$el.style.height = `${height}px`
+            anim.removeEventListener('enterFrame')
+        })
     },
 }
 </script>
@@ -78,10 +95,18 @@ export default {
 .color-bk {
    background-color: #444;
 }
-.desc {
-    background-color: #444;
+.result {
+    background-color: #222;
     color: #eee;
-    font-size: 18px;
+    font-size: 32px;
+    padding: 30px;
+    text-align: left;
+    max-height: 200px;
+}
+.desc {
+    background-color: #666;
+    color: #eee;
+    font-size: 32px;
     padding: 30px;
 }
 .desc a {

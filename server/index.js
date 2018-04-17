@@ -17,8 +17,8 @@ app.use(koaBody({ multipart: true }))
 app.use(router.routes())
 app.use(router.allowedMethods())
 
-app.use(serve(path.join(__dirname, '/public')))
+app.use(serve(path.join(__dirname, '../dist')))
 
 // listen
-app.listen(3000)
-console.log('listening on port 3000')
+app.listen(3131)
+console.log('listening on port 3131')

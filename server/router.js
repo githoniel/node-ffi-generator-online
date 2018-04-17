@@ -15,7 +15,7 @@ router.post('/upload', async (ctx, next) => {
     let resolve
     const promise = new Promise((_resolve) => { resolve = _resolve })
     stream.on('finish', async () => {
-        console.error('All writes are now complete.')
+        console.error(`${tempPath} are now complete.`)
         ctx.body = await getJS(tempPath)
         resolve()
         next()

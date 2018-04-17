@@ -101,7 +101,6 @@ export default {
     font-size: 32px;
     padding: 30px;
     text-align: left;
-    max-height: 200px;
 }
 .desc {
     background-color: #666;

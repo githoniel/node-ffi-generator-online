@@ -26,6 +26,7 @@
         </el-row>
         <transition name="el-zoom-in-top">
             <el-row class="result" v-if="respText">
+                <el-button type="success" @click="copy">Copy</el-button>
                 <el-col :span="24">
                     <pre>{{respText}}</pre>
                 </el-col>
@@ -57,6 +58,18 @@ export default {
                 desc: '',
             },
         }
+    },
+    methods: {
+        copy() {
+            const vm = this
+            function handler(event) {
+                event.clipboardData.setData('text/plain', vm.respText)
+                document.removeEventListener('copy', handler, true)
+                event.preventDefault()
+            }
+            document.addEventListener('copy', handler, true)
+            document.execCommand('copy')
+        },
     },
     computed: {
         respText() {
@@ -98,8 +111,10 @@ export default {
 .result {
     background-color: #222;
     color: #eee;
-    font-size: 32px;
+    font-size: 18px;
     padding: 30px;
+}
+.result pre {
     text-align: left;
 }
 .desc {

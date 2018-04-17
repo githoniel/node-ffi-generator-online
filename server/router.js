@@ -9,7 +9,7 @@ const router = new Router()
 
 router.post('/upload', async (ctx, next) => {
     const file = ctx.request.body.files.file
-    const tempPath = path.join(os.tmpdir(), uuid())
+    const tempPath = path.join(os.tmpdir(), `${uuid()}.h`)
     const reader = fs.createReadStream(file.path)
     const stream = fs.createWriteStream(tempPath)
     let resolve

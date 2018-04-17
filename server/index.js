@@ -2,46 +2,22 @@ const logger = require('koa-logger')
 const serve = require('koa-static')
 const koaBody = require('koa-body')
 const Koa = require('koa')
-const fs = require('fs')
+const cors = require('koa2-cors')
+const router = require('./router')
 
 const app = new Koa()
-const os = require('os')
 const path = require('path')
 
-// log requests
+app.use(cors())
 
 app.use(logger())
 
 app.use(koaBody({ multipart: true }))
-
-// custom 404
-
-app.use(async (ctx, next) => {
-    await next()
-    if (ctx.body || !ctx.idempotent) return
-    ctx.redirect('/404.html')
-})
-
 // serve files from ./public
+app.use(router.routes())
+app.use(router.allowedMethods())
 
 app.use(serve(path.join(__dirname, '/public')))
-
-// handle uploads
-
-app.use(async (ctx, next) => {
-    // ignore non-POSTs
-    if (ctx.method !== 'POST') return next()
-    const file = ctx.request.body.files.file
-    const reader = fs.createReadStream(file.path)
-    const stream = fs.createWriteStream(path.join(os.tmpdir(), Math.random().toString()))
-    stream.on('finish', () => {
-        console.error('All writes are now complete.')
-        ctx.body = 'good'
-        next()
-    })
-    reader.pipe(stream)
-    console.log('uploading %s -> %s', file.name, stream.path)
-})
 
 // listen
 app.listen(3000)

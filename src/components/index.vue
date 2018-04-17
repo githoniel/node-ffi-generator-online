@@ -17,10 +17,10 @@
                     </a>
                 </div>
             </el-col>
-            <el-col :span="6" ref="left">
+            <el-col :span="6" :offset="2" ref="left">
                 <div class="box" ref="articulation"></div>
             </el-col>
-            <el-col :span="18" ref="right">
+            <el-col :span="14" ref="right">
                 <upload-box></upload-box>
             </el-col>
         </el-row>

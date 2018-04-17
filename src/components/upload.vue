@@ -26,7 +26,7 @@
         <div v-show ="false">
             <file-upload
             class="btn btn-primary"
-            post-action="/upload/post"
+            post-action="http://localhost:3000/upload"
             :multiple="false"
             :drop="true"
             :drop-directory="false"
@@ -37,6 +37,13 @@
             Select files
             </file-upload>
         </div>
+         <el-button type="danger"
+             v-if="!$refs.upload || !$refs.upload.active"
+            @click.prevent="files = []"
+        >
+            Reset
+            <i class="el-icon-refresh el-icon--right"></i>
+        </el-button>
         <el-button type="primary"
              v-if="!$refs.upload || !$refs.upload.active"
             @click.prevent="$refs.upload.active = true"
@@ -122,9 +129,9 @@ export default {
             if (newFile && oldFile && !newFile.active && oldFile.active) {
                 // 清空
                 this.files = []
-                if (newFile.xhr && newFile.xhr.status === 200) {
+                if (newFile.xhr) {
                     // 获得响应状态码
-                    // console.log('status', newFile.xhr.status)
+                    console.log('status', newFile.xhr.status)
                 }
             }
         },

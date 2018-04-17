@@ -1,6 +1,6 @@
 # ffi-online
 
-> A Vue.js project
+> 在线转换C头文件到node-ffi描述文件
 
 ## Build Setup
 

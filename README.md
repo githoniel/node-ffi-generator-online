@@ -2,7 +2,22 @@
 
 > 在线转换C头文件到node-ffi描述文件
 
-## Build Setup
+# Summary
+
+because [node-ffi-generate](https://github.com/tjfontaine/node-ffi-generate) require Linux environment，so I write this project for guys using Windows.
+
+## Server Setup
+
+CentOS7 on Vultr
+``` bash
+sudo yum install clang
+yarn global add ffi-generate
+yarn global add libclang
+yarn global add pm2
+pm2 start server/index.js
+```
+
+## FrontEnd Build Setup
 
 ``` bash
 # install dependencies
